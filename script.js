@@ -18,7 +18,7 @@ const pages = [
         ]
     },
     {
-        title: "지난 2개월 동안 직장에서 다음 상황을 몇 번 경험하셨습니까",
+        title: "지난 3개월 동안 직장에서 다음 상황을 몇 번 경험하셨습니까 (1/2)",
         questions: [
             "나의 업무능력이나 성과를 인정하지 않거나 조롱했다",
             "내 성과를 가로채거나, 성과 달성을 방해했다",
@@ -29,15 +29,15 @@ const pages = [
             "누군가 내 개인사에 대한 뒷담화나 소문을 퍼뜨렸다",
             "나를 부적절하게 의심하거나, 누명을 씌웠다",
             "누군가 내 물건을 허락 없이 가져가거나 망가뜨렸다",
-            "다른 사람들 앞에서(또는 온라인상에서) 나에게 모욕감을 주는 언행을 했다",
-            "내 의사와 상관없이 음주/흡연을 강요했다",
-            "나의 의사와 관계없이 불필요한 추가근무(야근, 주말출근 등)을 강요했다",
-            "나에게 부당한 징계를 주었다 (반성문, 처벌 등)"
+            "다른 사람들 앞에서(또는 온라인상에서) 나에게 모욕감을 주는 언행을 했다"
         ]
     },
     {
-        title: "지난 3개월 동안 직장에서 다음 상황을 몇 번 경험하셨습니까",
+        title: "지난 3개월 동안 직장에서 다음 상황을 몇 번 경험하셨습니까 (2/2)",
         questions: [
+            "내 의사와 상관없이 음주/흡연을 강요했다",
+            "나의 의사와 관계없이 불필요한 추가근무(야근, 주말출근 등)을 강요했다",
+            "나에게 부당한 징계를 주었다 (반성문, 처벌 등)",
             "훈련, 승진, 보상, 일상적인 대우 등에서 차별을 했다",
             "나에게 힘들고, 모두가 꺼리는 업무를 주었다",
             "허드렛일만 시키거나 일을 거의 주지 않았다",
@@ -68,8 +68,7 @@ function displayPage() {
         html += page.questions.map((question, index) => `
             <div class="question">
                 <label>${question}</label>
-                <input type="number" min="0" value="0" id="q${currentPage}_${index}">
-                <span>회</span>
+                <input type="number" min="0" value="0" id="q${currentPage}_${index}"> 회
             </div>
         `).join('');
     } else {
@@ -77,9 +76,8 @@ function displayPage() {
     }
 
     content.innerHTML = html;
-
     const nextBtn = document.getElementById('nextBtn');
-    nextBtn.textContent = currentPage === pages.length - 1 ? '결과 보기' : '다음';
+    nextBtn.textContent = currentPage === pages.length - 1 ? '결과 확인' : '다음';
 }
 
 function nextPage() {
@@ -89,7 +87,6 @@ function nextPage() {
         });
         answers.push(pageAnswers);
     }
-
     currentPage++;
     displayPage();
 }
@@ -97,30 +94,19 @@ function nextPage() {
 function displayResult() {
     const content = document.getElementById('content');
     const results = calculateResults();
-
     let html = `
         <h2>진단 결과</h2>
         <p>1개월 내 경험 횟수: ${results[0]}회 (4회 이상이면 Harassment 피해자일 수 있습니다)</p>
-        <p>2개월 내 경험 횟수: ${results[1]}회 (8회 이상이면 Bullying 피해자일 수 있습니다)</p>
-        <p>3개월 내 경험 횟수: ${results[2]}회 (12회 이상이면 Bullying 피해자일 수 있습니다)</p>
+        <p>3개월 내 경험 횟수: ${results[1] + results[2]}회 (12회 이상이면 Bullying 피해자일 수 있습니다)</p>
         <p>만약 괴롭힘이 의심된다면, 전문가와 상담하는 것이 좋습니다.</p>
     `;
-
     content.innerHTML = html;
-
     const nextBtn = document.getElementById('nextBtn');
-    nextBtn.textContent = '다시 시작';
-    nextBtn.onclick = restart;
+    nextBtn.style.display = 'none';
 }
 
 function calculateResults() {
     return answers.map(pageAnswers => pageAnswers.reduce((sum, current) => sum + current, 0));
-}
-
-function restart() {
-    currentPage = 0;
-    answers.length = 0;
-    displayPage();
 }
 
 displayPage();

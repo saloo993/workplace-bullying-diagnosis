@@ -6,27 +6,15 @@ body {
     max-width: 800px;
     margin: 0 auto;
 }
-
 h1 {
     text-align: center;
 }
-
 .question {
-    display: flex;
-    align-items: center;
     margin-bottom: 10px;
 }
-
-.question label {
-    flex: 1;
-    margin-right: 10px;
-}
-
-.question input[type="number"] {
+input[type="number"] {
     width: 50px;
-    margin-right: 5px;
 }
-
 #nextBtn {
     display: block;
     margin: 20px auto;
